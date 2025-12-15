@@ -55,4 +55,30 @@ class TaskRepository:
     def add_task(self, task):
         self.tasks.append(task)
         self._save()
+        return task
+    
+    def get_all(self):
+        return list(self.tasks)
+    
+    def get_by_id(self, task_id: int):
+        for task in self.tasks:
+            if task.id == task_id:
+                return task
+        return None
+    
+    def update(self, updated_task: Task):
+        for i, task in enumerate(self.tasks):
+            if task.id == updated_task.id:
+                self.tasks[i] = updated_task
+                self._save()
+                return True
+        return False
+    
+    def delete(self, task_id: int):
+        for i, task in enumerate(self.tasks):
+            if task.id == task_id:
+                del self.tasks[i]
+                self._save()
+                return True
+        return False
         
