@@ -1,11 +1,13 @@
 import datetime
+import unicodedata
 
 class Task:
-    VALID_PRIORITIES = ['Baixa', 'Média', 'Alta']
-    VALID_STATUS = ['Pendente', 'Em Progresso', 'Concluída']
+    VALID_PRIORITIES = ['baixa', 'media', 'alta']
+    VALID_STATUS = ['pendente', 'em progresso', 'concluida']
     _id_counter = 1
 
-    def __init__(self, titulo, descricao="", prioridade="Média", deadline=None, status='Pendente', task_id=None):
+
+    def __init__(self, titulo, descricao="", prioridade="media", deadline=None, status='pendente', task_id=None):
         self.id = task_id if task_id is not None else Task._generate_id()
         self.titulo = titulo
         self.descricao = descricao
@@ -19,14 +21,26 @@ class Task:
 #--------------------------------
 
     def _validate_priority(self, value):
-        if value not in Task.VALID_PRIORITIES:
-            raise ValueError(f"Prioridade inválida: {value}. Valores válidos são: {self.VALID_PRIORITIES}")
-        return value
+        if value is None:
+            raise ValueError("Prioridade não pode ser vazia.")
+
+        normalized = Task._normalize_text(value)
+
+        if normalized not in Task.VALID_PRIORITIES:
+            raise ValueError(
+                f"Prioridade inválida: {value}. Use: {Task.VALID_PRIORITIES}"
+                )
+
+        return normalized
+
     
     def _validate_status(self, value):
-        if value not in Task.VALID_STATUS:
-            raise ValueError(f"Status inválido: {value}. Valores válidos são: {self.VALID_STATUS}")
-        return value
+        normalized = Task._normalize_text(value)
+
+        if normalized not in Task.VALID_STATUS:
+            raise ValueError(f"Status inválido: {value}")
+
+        return normalized
     
     def _validate_deadline(self, deadline):
         if deadline is None:
@@ -75,4 +89,12 @@ class Task:
             status=data.get("status", "Pendente"),
             task_id=data.get("id")
         )
+    
+    @staticmethod
+    def _normalize_text(value: str) -> str:
+        value = value.strip().lower()
+        value = unicodedata.normalize("NFKD", value)
+        value = value.encode("ASCII", "ignore").decode("ASCII")
+        return value
+   
     
