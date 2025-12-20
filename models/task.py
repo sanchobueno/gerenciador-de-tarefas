@@ -5,9 +5,9 @@ class Task:
     VALID_STATUS = ['Pendente', 'Em Progresso', 'Concluída']
     _id_counter = 1
 
-    def __init__(self, title, descricao="", prioridade="Média", deadline=None, status='Pendente', task_id=None):
+    def __init__(self, titulo, descricao="", prioridade="Média", deadline=None, status='Pendente', task_id=None):
         self.id = task_id if task_id is not None else Task._generate_id()
-        self.title = title
+        self.titulo = titulo
         self.descricao = descricao
         self.prioridade = self._validate_priority(prioridade)
         self.status = self._validate_status(status)
@@ -45,7 +45,7 @@ class Task:
     def to_dict(self):
         return {
             "id": self.id,
-            "title": self.title,
+            "titulo": self.titulo,
             "descricao": self.descricao,
             "prioridade": self.prioridade,
             "status": self.status,
@@ -68,7 +68,7 @@ class Task:
     @staticmethod
     def from_dict(data):
         return Task(
-            title=data["titulo"],
+            titulo=data["titulo"],
             descricao=data.get("descricao"),
             prioridade=data.get("prioridade", "Média"),
             deadline=data.get("deadline"),

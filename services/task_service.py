@@ -1,3 +1,5 @@
+print(">>> TASK_SERVICE CARREGADO <<<")
+
 from models.task import Task
 
 class TaskService:
@@ -9,7 +11,7 @@ class TaskService:
         # Cria tarefa
         #-----------------------------
 
-        def create_task(self, titulo, descricao="", prioridade="media", deadline=None):
+    def create_task(self, titulo, descricao="", prioridade="Média", deadline=None):
             if not titulo or not titulo.strip():
                 raise ValueError("O título da tarefa não pode ser vazio.")
             
@@ -25,28 +27,28 @@ class TaskService:
         # Lista todas as tarefas
         #-----------------------------
 
-        def list_tasks(self):
+    def list_tasks(self):
             return self.repository.get_all()
         
         #-----------------------------
         # concluir tarefa
         #-----------------------------
 
-        def complete_task(self, task_id):
+    def complete_task(self, task_id):
             task = self.repository.get_by_id(task_id)
 
             if not task:
                 raise ValueError("Tarefa não encontrada.")
             
             task.status = "concluida"
-            self.repositoru.update(task)
+            self.repository.update(task)
             return task
         
         #-----------------------------
         # atualizar tarefa
         #-----------------------------
 
-        def update_task(self, task_id, titulo=None, descricao=None, prioridade=None, deadline=None):
+    def update_task(self, task_id, titulo=None, descricao=None, prioridade=None, deadline=None):
             task = self.repository.get_by_id(task_id)
             
             if not task:
@@ -72,7 +74,7 @@ class TaskService:
         # deletar tarefa
         #-----------------------------
 
-        def delete_task(self, task_id):
+    def delete_task(self, task_id):
             if not self.repository.delete(task_id):
                 raise ValueError("Tarefa não encontrada.")
             return True

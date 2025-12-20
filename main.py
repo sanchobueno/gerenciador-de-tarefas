@@ -7,7 +7,7 @@ def print_task(task):
     print(f"[{(status)}] {task.id} - {task.titulo}")
 
     if task.descricao:
-        priint(f"    {task.descricao}")
+        print(f"    {task.descricao}")
 
     if task.deadline:
         print(f"    📅 Deadline: {task.deadline}")
@@ -30,13 +30,13 @@ def main():
         print("4. Excluir Tarefa")
         print("0. Sair")
 
-        choice = imput("Escolha uma opção: ").strip()
+        choice = input("Escolha uma opção: ").strip()
 
         try:
             if choice == "1":
                 titulo = input("Título: ")
                 descricao = input("Descrição (opcional): ")
-                prioridade = input("Prioridade (baixa, media, alta): ")or "media"
+                prioridade = input("Prioridade (Baixa, Média, Alta): ")or "Média"
                 deadline = input("Deadline (YYYY-MM-DD, opcional): ") or None
 
                 task = service.create_task(
