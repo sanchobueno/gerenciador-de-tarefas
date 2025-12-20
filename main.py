@@ -1,0 +1,82 @@
+from repositories.task_repository import TaskRepository
+from services.task_service import TaskService
+
+def print_task(task):
+    """imprime uma tarefa de forma amigável"""
+    status = "✅" if task.status == "concluida" else "⏳"
+    print(f"[{(status)}] {task.id} - {task.titulo}")
+
+    if task.descricao:
+        priint(f"    {task.descricao}")
+
+    if task.deadline:
+        print(f"    📅 Deadline: {task.deadline}")
+
+    print(f"    🔥 Prioridade: {task.prioridade}")
+    print("-" * 40)
+
+def main():
+    #-----------------------------
+    # inicialização (a magica acontece aqui)
+    #-----------------------------
+    repository = TaskRepository()
+    service = TaskService(repository)
+
+    while True:
+        print("\n==== Gerenciador de Tarefas ====")
+        print("1. Criar Tarefa")
+        print("2. Listar Tarefas")
+        print("3. Concluir Tarefa")
+        print("4. Excluir Tarefa")
+        print("0. Sair")
+
+        choice = imput("Escolha uma opção: ").strip()
+
+        try:
+            if choice == "1":
+                titulo = input("Título: ")
+                descricao = input("Descrição (opcional): ")
+                prioridade = input("Prioridade (baixa, media, alta): ")or "media"
+                deadline = input("Deadline (YYYY-MM-DD, opcional): ") or None
+
+                task = service.create_task(
+                    titulo=titulo,
+                    descricao=descricao,
+                    prioridade=prioridade,
+                    deadline=deadline
+                )
+
+                print(f"\nTarefa criada com ID{task.id}")
+
+            elif choice == "2":
+                tasks = service.list_tasks()
+
+                if not tasks:
+                    print("\nNenhuma tarefa encontrada.")
+                else:
+                    print("\n=== Lista de Tarefas ===")
+                    for task in tasks:
+                        print_task(task)
+                
+            elif choice == "3":
+                task_id = int(input("ID da tarefa a concluir: "))
+                service.complete_task(task_id)
+                print("\nTarefa concluída com sucesso.")
+            
+            elif choice == "4":
+                task_id = int(input("ID da tarefa a excluir: "))
+                service.delete_task(task_id)
+                print("\nTarefa excluída com sucesso.")
+
+            elif choice == "0":
+                print("Saindo...")
+                break
+
+            else:
+                print("Opção inválida. Tente novamente.")
+
+        except ValueError as e:
+            print(f"Erro: {e}")
+
+if __name__ == "__main__":
+    main()

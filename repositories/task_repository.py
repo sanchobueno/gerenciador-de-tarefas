@@ -29,7 +29,7 @@ class TaskRepository:
                     Task._id_counter = max_id + 1
         except Exception:
             self.tasks = []
-            self.save()
+            self._save()
 
 #-----------------------------
 # Salvar memória -> JSON   
@@ -52,7 +52,7 @@ class TaskRepository:
 # Operações CRUD
 #-----------------------------
 
-    def add_task(self, task):
+    def add(self, task):
         self.tasks.append(task)
         self._save()
         return task
