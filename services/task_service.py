@@ -1,5 +1,4 @@
-print(">>> TASK_SERVICE CARREGADO <<<")
-
+from models import task
 from models.task import Task
 
 class TaskService:
@@ -39,10 +38,16 @@ class TaskService:
 
             if not task:
                 raise ValueError("Tarefa não encontrada.")
-            
+
+            if task.status == "concluida":
+                raise ValueError("A tarefa já está concluída.")
+
             task.status = "concluida"
             self.repository.update(task)
             return task
+
+            
+    
         
         #-----------------------------
         # atualizar tarefa

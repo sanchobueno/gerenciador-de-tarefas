@@ -3,8 +3,32 @@
         "id": 3,
         "titulo": "teste 2",
         "descricao": "",
-        "prioridade": "Média",
+        "prioridade": "media",
         "status": "concluida",
         "deadline": null
+    },
+    {
+        "id": 4,
+        "titulo": "nova tarefa",
+        "descricao": "",
+        "prioridade": "media",
+        "status": "pendente",
+        "deadline": null
+    },
+    {
+        "id": 6,
+        "titulo": "estudar argparse",
+        "descricao": "estudar python",
+        "prioridade": "alta",
+        "status": "pendente",
+        "deadline": "2025-12-30"
+    },
+    {
+        "id": 7,
+        "titulo": "estudar argparse",
+        "descricao": "estudar python",
+        "prioridade": "alta",
+        "status": "pendente",
+        "deadline": "2025-12-30"
     }
 ]
