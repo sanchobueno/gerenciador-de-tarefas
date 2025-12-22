@@ -1,5 +1,6 @@
 import datetime
 import unicodedata
+from datetime import date
 
 class Task:
     VALID_PRIORITIES = ['baixa', 'media', 'alta']

@@ -50,10 +50,39 @@ def main():
 
     #---------------list   
     # Subcomando: list
-    subparsers.add_parser(
+    list_parser = subparsers.add_parser(
         "list",
         help="Listar todas as tarefas"
     )
+
+    list_parser.add_argument(
+        "--status",
+        choices=["pendente", "em progresso", "concluida"],
+        default=None,
+        help="Filtrar tarefas por status"
+    )
+
+    list_parser.add_argument(
+        "--priority",
+        choices=["baixa", "media", "alta"],
+        default=None,
+        help="Filtrar tarefas por prioridade"
+    )
+
+    list_parser.add_argument(
+        "--deadline",
+        help="Filtrar tarefas por deadline (YYYY-MM-DD)"
+    )
+
+    list_parser.add_argument(
+        "--before",
+        help="Listar tarefas com deadline antes da data (YYYY-MM-DD)"
+        )
+
+    list_parser.add_argument(
+        "--after",
+        help="Listar tarefas com deadline depois da data (YYYY-MM-DD)"
+        )
 
 
     #--------------subcomando: complete
@@ -87,6 +116,9 @@ def main():
 
 # Parse os argumentos da linha de comando
     args = parser.parse_args()
+
+
+
 #------------execução create-------------
     if args.command == "create":
         try:
@@ -101,11 +133,22 @@ def main():
             print(f"Título: {task.titulo}")
             print(f"Prioridade: {task.prioridade}")
             print(f"Status: {task.status}")
+            print(f"Deadline: {task.deadline}")
+
         except ValueError as e:
             print(f"Erro ao criar tarefa: {e}")
+
+
+
 #------------execução list-------------
     elif args.command == "list":
-        tasks = service.list_tasks()
+        tasks = service.list_tasks(
+            status=args.status,
+            priority=args.priority,
+            deadline=args.deadline,
+            before=args.before,
+            after=args.after
+        )
         if not tasks:
             print("📭 Nenhuma tarefa cadastrada.")
             return
@@ -117,7 +160,12 @@ def main():
             f"ID {task.id} | "
             f"{task.titulo} "
             f"(Prioridade: {task.prioridade})"
+            f"(deadline: {task.deadline})"
         )
+            
+
+
+
 #------------execução complete-------------
     elif args.command == "complete":
         try:
