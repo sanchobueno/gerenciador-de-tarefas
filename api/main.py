@@ -1,7 +1,11 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from repositories.task_repository import TaskRepository
 from services.task_service import TaskService
 from typing import Optional
+
+from schemas.task_filter import TaskFilter
+from schemas.task_response import TaskResponse
+from schemas.task_create import TaskCreate
 
 
 repository = TaskRepository()
@@ -14,23 +18,24 @@ app = FastAPI(
     version="1.0.0"
 )
 
+def get_task_service():
+    repository = TaskRepository("data/tasks.json")
+    return TaskService(repository)
+
 @app.get("/health")
 def health_check():
     return {"status": "ok"}
 
-@app.get("/tasks")
+@app.get("/tasks", response_model=list[TaskResponse])
 def list_tasks(
-    status: Optional[str] = None,
-    priority: Optional[str] = None,
-    deadline: Optional[str] = None,
-    before: Optional[str] = None,
-    after: Optional[str] = None
+    filters: TaskFilter = Depends(),
+    service: TaskService = Depends(get_task_service)
 ):
     tasks = service.list_tasks(
-        status=status,
-        priority=priority,
-        deadline=deadline,
-        before=before,
-        after=after
+        status=filters.status,
+        priority=filters.priority,
+        deadline=filters.deadline,
+        before=filters.before,
+        after=filters.after
     )
-    return tasks
+    return [TaskResponse.from_domain(task) for task in tasks]

@@ -1,6 +1,6 @@
 from models import task
 from models.task import Task
-from datetime import datetime
+from datetime import date, datetime
 
 class TaskService:
     def __init__(self, repository):
@@ -31,17 +31,17 @@ class TaskService:
             tasks = self.repository.get_all()
             if status:
                 tasks = [t for t in tasks if t.status == status]
+
             if priority:
                 tasks = [t for t in tasks if t.prioridade == priority]
+
             if deadline:
-                deadline = datetime.strptime(deadline, "%Y-%m-%d").date()
                 tasks = [t for t in tasks if t.deadline == deadline]
             if before:
-                before_date = datetime.strptime(before, "%Y-%m-%d").date()
-                tasks = [t for t in tasks if t.deadline and t.deadline < before_date]
+                tasks = [t for t in tasks if t.deadline and t.deadline < before]
+
             if after:
-                after_date = datetime.strptime(after, "%Y-%m-%d").date()
-                tasks = [t for t in tasks if t.deadline and t.deadline > after_date]
+                tasks = [t for t in tasks if t.deadline and t.deadline > after]
 
             return tasks
 
